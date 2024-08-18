@@ -138,8 +138,15 @@ public class NaryTree {
     }
 
     private static void getDeepestRec(TreeNode root, int level, int[] max, TreeNode[] node){
-        if(node == null) return;
+        if(root == null) return;
+        // if(level > max[0]){
+        if(level == max[0] && root.children.size() > 0){
+            // node[1] = node[0];
+            node[0] = root;
+            // max[0] = level;
+        }
         if(level > max[0]){
+            node[1] = node[0];
             node[0] = root;
             max[0] = level;
         }
@@ -148,12 +155,12 @@ public class NaryTree {
         }
     }
 
-    private static TreeNode getDeepestRecursion(TreeNode root){
+    private static TreeNode[] getDeepestRecursion(TreeNode root){
         if(root == null) return null;
         int[] max = new int[1];
-        TreeNode[] deepestNode = new TreeNode[] {root};
+        TreeNode[] deepestNode = new TreeNode[] {root, null};
         getDeepestRec(root, 0, max, deepestNode);
-        return deepestNode[0];
+        return deepestNode;
     }
 
 
@@ -178,6 +185,8 @@ public class NaryTree {
         // maxDepth(root);
         // displayWithDepth(root);
         // System.out.println("Max Depth : " + maxDepthRecursionParent(root));
-        System.out.println("Deepest Node : " + getDeepestRecursion(root).val);
+        TreeNode[] deepestNodeAndParent = getDeepestRecursion(root);
+        System.out.println("Deepest Node : " + deepestNodeAndParent[0] + "\nParent: " + deepestNodeAndParent[1]);
+        // System.out.println("Deepest Node : " + getDeepestRecursion(root)[0] + " and " + getDeepestRecursion(root)[1]);
     }
 }
