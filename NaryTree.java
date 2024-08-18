@@ -140,18 +140,27 @@ public class NaryTree {
     private static void getDeepestRec(TreeNode root, int level, int[] max, TreeNode[] node){
         if(root == null) return;
         // if(level > max[0]){
-        if(level == max[0] && root.children.size() > 0){
-            // node[1] = node[0];
-            node[0] = root;
-            // max[0] = level;
-        }
         if(level > max[0]){
             node[1] = node[0];
             node[0] = root;
             max[0] = level;
         }
+        if(level == max[0] && root.children.size() > 0){
+            node[0] = root;
+        }
         for(TreeNode child : root.children){
             getDeepestRec(child, level+1, max, node);
+        }
+    }
+
+    private static void removeDeepestNode(TreeNode root, TreeNode deepestNode, TreeNode parent){
+        if(root == null) return;
+        if(root == deepestNode){
+            parent.children.remove(deepestNode);
+            return;
+        }
+        for(TreeNode child : root.children){
+            removeDeepestNode(child, deepestNode, root);
         }
     }
 
@@ -160,6 +169,8 @@ public class NaryTree {
         int[] max = new int[1];
         TreeNode[] deepestNode = new TreeNode[] {root, null};
         getDeepestRec(root, 0, max, deepestNode);
+        deepestNode[1].val += deepestNode[0].val;
+        deepestNode[1].children.remove(deepestNode[0]);
         return deepestNode;
     }
 
@@ -187,6 +198,8 @@ public class NaryTree {
         // System.out.println("Max Depth : " + maxDepthRecursionParent(root));
         TreeNode[] deepestNodeAndParent = getDeepestRecursion(root);
         System.out.println("Deepest Node : " + deepestNodeAndParent[0] + "\nParent: " + deepestNodeAndParent[1]);
-        // System.out.println("Deepest Node : " + getDeepestRecursion(root)[0] + " and " + getDeepestRecursion(root)[1]);
+        // removeDeepestNode(root, deepestNodeAndParent[0], deepestNodeAndParent[1]);
+        printNAryTreePreorderDepthRecursion(root, 1);
+
     }
 }
